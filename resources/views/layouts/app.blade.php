@@ -60,7 +60,7 @@
                     <a href="{{ route('home') }}" class="text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition">
                         Beranda
                     </a>
-                    <a href="#" class="text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition">
+                    <a href="{{ route('track') }}" class="text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition">
                         Cek Transaksi
                     </a>
 
@@ -88,7 +88,16 @@
                                 <div class="px-4 py-2 border-b border-gray-700 text-xs text-gray-400">
                                     Halo, {{ Auth::user()->name }}
                                 </div>
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Profile Saya</a>
+                                
+                                <!-- Menu Khusus Admin -->
+                                @if(auth()->user()->role === 'admin')
+                                    <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-sm text-yellow-400 hover:bg-gray-700 hover:text-yellow-300 font-bold border-b border-gray-600">
+                                        🔥 Halaman Admin
+                                    </a>
+                                @endif
+
+                                <!-- PERBAIKAN: Link Profile Saya -->
+                                <a href="{{ route('profile') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Profile Saya</a>
                                 
                                 <form action="{{ route('logout') }}" method="POST" class="w-full">
                                     @csrf
@@ -116,7 +125,7 @@
         <div id="mobile-menu" class="hidden sm:hidden bg-card border-t border-gray-700">
             <div class="px-2 pt-2 pb-3 space-y-1">
                 <a href="{{ route('home') }}" class="block text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-base font-medium">Beranda</a>
-                <a href="#" class="block text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-base font-medium">Cek Transaksi</a>
+                <a href="{{ route('track') }}" class="block text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-base font-medium">Cek Transaksi</a>
                 
                 @guest
                     <div class="border-t border-gray-700 mt-2 pt-2">
@@ -126,6 +135,15 @@
                 @else
                     <div class="border-t border-gray-700 mt-2 pt-2">
                         <div class="px-3 py-2 text-gray-400 text-sm">Login sebagai: {{ Auth::user()->name }}</div>
+                        
+                        <!-- Menu Admin Mobile -->
+                        @if(auth()->user()->role === 'admin')
+                            <a href="{{ route('admin.dashboard') }}" class="block text-yellow-400 font-bold hover:bg-gray-700 px-3 py-2 rounded-md text-base">Halaman Admin</a>
+                        @endif
+
+                        <!-- PERBAIKAN: Menu Profile Mobile -->
+                        <a href="{{ route('profile') }}" class="block text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-base font-medium">Profile Saya</a>
+
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button type="submit" class="block w-full text-left text-red-400 hover:bg-gray-700 px-3 py-2 rounded-md text-base font-medium">Logout</button>

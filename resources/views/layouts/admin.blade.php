@@ -63,9 +63,10 @@
                         </a>
                         
                         <!-- Menu Kelola Games (Placeholder) -->
-                        <a href="#" class="text-gray-400 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition">
-                            Kelola Games
-                        </a>
+                        <a href="{{ route('admin.games') }}" 
+   class="{{ request()->routeIs('admin.games*') ? 'bg-gray-700 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-700' }} px-3 py-2 rounded-md text-sm font-medium transition">
+    Kelola Games
+</a>
 
                         <!-- Menu Kelola Produk (Aktif jika rute diawali admin.products) -->
                         <a href="{{ route('admin.products') }}" 

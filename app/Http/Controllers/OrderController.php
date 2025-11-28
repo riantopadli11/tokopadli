@@ -65,4 +65,28 @@ class OrderController extends Controller
         $trx = Transaction::with(['product.game'])->where('invoice_code', $code)->firstOrFail();
         return view('invoice', compact('trx'));
     }
+        // 5. Halaman Cari Transaksi (Form)
+    public function track()
+    {
+        return view('track');
+    }
+
+    // 6. Proses Pencarian Transaksi
+    public function checkTransaction(Request $request)
+    {
+        $request->validate([
+            'invoice' => 'required|string'
+        ]);
+
+        // Cari transaksi berdasarkan invoice code
+        $trx = Transaction::where('invoice_code', $request->invoice)->first();
+
+        if ($trx) {
+            // Jika ketemu, lempar ke halaman invoice detail
+            return redirect()->route('invoice', $trx->invoice_code);
+        }
+
+        // Jika tidak ketemu, kembalikan dengan pesan error
+        return back()->withErrors(['invoice' => 'Invoice tidak ditemukan! Cek kembali kode pesananmu.']);
+    }
 }
