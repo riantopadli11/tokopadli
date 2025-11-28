@@ -4,6 +4,7 @@
 
 <div class="max-w-4xl mx-auto">
     
+    <!-- HEADER GAME -->
     <div class="flex items-center gap-6 mb-8 bg-card p-6 rounded-2xl shadow-lg border border-gray-700">
         <img src="{{ $game->thumbnail ? asset('storage/'.$game->thumbnail) : 'https://placehold.co/200x200/1e293b/FFF?text='.substr($game->name, 0, 2) }}" 
              class="w-24 h-24 rounded-2xl shadow-lg object-cover">
@@ -17,6 +18,7 @@
         @csrf
         <input type="hidden" name="game_id" value="{{ $game->id }}">
 
+        <!-- LANGKAH 1: Masukkan ID -->
         <div class="bg-card rounded-2xl p-6 mb-6 border border-gray-700 shadow-lg relative overflow-hidden">
             <div class="absolute top-0 left-0 bg-primary px-4 py-1 rounded-br-xl text-xs font-bold">Langkah 1</div>
             <h2 class="text-xl font-bold mb-4 mt-2">Masukkan User ID</h2>
@@ -36,6 +38,7 @@
             <p class="text-xs text-gray-500 mt-2 italic">*Untuk Mobile Legends, gabungkan User ID dan Zone ID.</p>
         </div>
 
+        <!-- LANGKAH 2: Pilih Nominal -->
         <div class="bg-card rounded-2xl p-6 mb-6 border border-gray-700 shadow-lg relative overflow-hidden">
             <div class="absolute top-0 left-0 bg-primary px-4 py-1 rounded-br-xl text-xs font-bold">Langkah 2</div>
             <h2 class="text-xl font-bold mb-4 mt-2">Pilih Nominal Top Up</h2>
@@ -60,29 +63,51 @@
             </div>
         </div>
 
+        <!-- LANGKAH 3: Pilih Pembayaran -->
         <div class="bg-card rounded-2xl p-6 mb-6 border border-gray-700 shadow-lg relative overflow-hidden">
             <div class="absolute top-0 left-0 bg-primary px-4 py-1 rounded-br-xl text-xs font-bold">Langkah 3</div>
             <h2 class="text-xl font-bold mb-4 mt-2">Metode Pembayaran</h2>
 
             <div class="space-y-3">
-                <label class="flex items-center justify-between p-4 bg-dark border border-gray-600 rounded-xl cursor-pointer hover:border-primary peer-checked:border-primary">
+                <!-- OPSI 1: MANUAL BCA -->
+                <label class="flex items-center justify-between p-4 bg-dark border border-gray-600 rounded-xl cursor-pointer hover:border-primary peer-checked:border-primary transition">
                     <div class="flex items-center gap-4">
-                        <input type="radio" name="payment_method" value="QRIS" class="text-primary focus:ring-primary" required>
-                        <span class="font-bold">QRIS (All Payment)</span>
+                        <input type="radio" name="payment_method" value="MANUAL_BCA" class="text-primary focus:ring-primary" required>
+                        <div>
+                            <span class="font-bold block">Transfer BCA (Manual)</span>
+                            <span class="text-xs text-gray-400">Cek Otomatis 1-5 Menit</span>
+                        </div>
                     </div>
-                    <div class="text-xs bg-white text-black px-2 py-1 font-bold rounded">QRIS</div>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/2560px-Bank_Central_Asia.svg.png" class="h-4 bg-white p-0.5 rounded">
                 </label>
 
-                <label class="flex items-center justify-between p-4 bg-dark border border-gray-600 rounded-xl cursor-pointer hover:border-primary">
+                <!-- OPSI 2: MANUAL DANA -->
+                <label class="flex items-center justify-between p-4 bg-dark border border-gray-600 rounded-xl cursor-pointer hover:border-primary transition">
                     <div class="flex items-center gap-4">
-                        <input type="radio" name="payment_method" value="VA_BCA" class="text-primary focus:ring-primary">
-                        <span class="font-bold">Transfer Bank BCA</span>
+                        <input type="radio" name="payment_method" value="MANUAL_DANA" class="text-primary focus:ring-primary">
+                        <div>
+                            <span class="font-bold block">DANA (Manual)</span>
+                            <span class="text-xs text-gray-400">Kirim Bukti ke WA</span>
+                        </div>
                     </div>
-                    <div class="text-xs bg-blue-600 text-white px-2 py-1 font-bold rounded">BCA</div>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Logo_dana_blue.svg/1200px-Logo_dana_blue.svg.png" class="h-4 bg-white p-0.5 rounded">
+                </label>
+
+                <!-- OPSI 3: QRIS (Tripay - Nonaktif Sementara) -->
+                <label class="flex items-center justify-between p-4 bg-dark border border-gray-600 rounded-xl cursor-not-allowed opacity-50">
+                    <div class="flex items-center gap-4">
+                        <input type="radio" name="payment_method" value="QRIS" class="text-primary focus:ring-primary" disabled>
+                        <div>
+                            <span class="font-bold block text-gray-500">QRIS Otomatis (Maintenance)</span>
+                            <span class="text-xs text-gray-500">Belum tersedia</span>
+                        </div>
+                    </div>
+                    <div class="text-xs bg-gray-600 text-gray-300 px-2 py-1 font-bold rounded">QRIS</div>
                 </label>
             </div>
         </div>
 
+        <!-- Tombol Submit -->
         <button type="submit" class="w-full bg-primary hover:bg-indigo-600 text-white font-bold py-4 rounded-xl text-lg shadow-lg shadow-indigo-500/50 transition transform hover:-translate-y-1">
             Beli Sekarang
         </button>

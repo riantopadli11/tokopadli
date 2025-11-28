@@ -73,35 +73,55 @@
                         <td class="px-6 py-4">{{ $trx->product->name }}</td>
                         <td class="px-6 py-4 text-white font-medium">Rp {{ number_format($trx->amount) }}</td>
                         
-                        <!-- Form Update Status -->
-                        <form action="{{ route('admin.transaction.update', $trx->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
+                        <!-- KOLOM STATUS PEMBAYARAN -->
+                        <td class="px-6 py-4 text-center">
+                            <!-- Input dikaitkan ke form update lewat ID 'form-update-{{$trx->id}}' -->
+                            <select name="payment_status" form="form-update-{{$trx->id}}" onchange="document.getElementById('form-update-{{$trx->id}}').submit()" 
+                                    class="bg-dark border rounded px-2 py-1 text-xs focus:outline-none cursor-pointer font-bold
+                                    {{ $trx->payment_status == 'paid' ? 'border-green-500 text-green-400' : 'border-red-500 text-red-400' }}">
+                                <option value="unpaid" {{ $trx->payment_status == 'unpaid' ? 'selected' : '' }}>UNPAID</option>
+                                <option value="paid" {{ $trx->payment_status == 'paid' ? 'selected' : '' }}>PAID</option>
+                                <option value="expired" {{ $trx->payment_status == 'expired' ? 'selected' : '' }}>EXPIRED</option>
+                            </select>
+                        </td>
+
+                        <!-- KOLOM STATUS PROSES -->
+                        <td class="px-6 py-4 text-center">
+                            <select name="process_status" form="form-update-{{$trx->id}}" onchange="document.getElementById('form-update-{{$trx->id}}').submit()" 
+                                    class="bg-dark border rounded px-2 py-1 text-xs focus:outline-none cursor-pointer font-bold
+                                    {{ $trx->process_status == 'success' ? 'border-green-500 text-green-400' : 
+                                       ($trx->process_status == 'failed' ? 'border-red-500 text-red-400' : 'border-yellow-500 text-yellow-400') }}">
+                                <option value="pending" {{ $trx->process_status == 'pending' ? 'selected' : '' }}>Pending</option>
+                                <option value="processing" {{ $trx->process_status == 'processing' ? 'selected' : '' }}>Processing</option>
+                                <option value="success" {{ $trx->process_status == 'success' ? 'selected' : '' }}>Success</option>
+                                <option value="failed" {{ $trx->process_status == 'failed' ? 'selected' : '' }}>Failed</option>
+                            </select>
+                        </td>
+
+                        <!-- KOLOM AKSI (UPDATE & DELETE) -->
+                        <td class="px-6 py-4 text-center flex items-center justify-center gap-2">
                             
-                            <td class="px-6 py-4 text-center">
-                                <select name="payment_status" onchange="this.form.submit()" 
-                                        class="bg-dark border rounded px-2 py-1 text-xs focus:outline-none cursor-pointer font-bold
-                                        {{ $trx->payment_status == 'paid' ? 'border-green-500 text-green-400' : 'border-red-500 text-red-400' }}">
-                                    <option value="unpaid" {{ $trx->payment_status == 'unpaid' ? 'selected' : '' }}>Unpaid</option>
-                                    <option value="paid" {{ $trx->payment_status == 'paid' ? 'selected' : '' }}>PAID</option>
-                                    <option value="expired" {{ $trx->payment_status == 'expired' ? 'selected' : '' }}>Expired</option>
-                                </select>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <select name="process_status" onchange="this.form.submit()" 
-                                        class="bg-dark border rounded px-2 py-1 text-xs focus:outline-none cursor-pointer font-bold
-                                        {{ $trx->process_status == 'success' ? 'border-green-500 text-green-400' : 
-                                           ($trx->process_status == 'failed' ? 'border-red-500 text-red-400' : 'border-yellow-500 text-yellow-400') }}">
-                                    <option value="pending" {{ $trx->process_status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                    <option value="processing" {{ $trx->process_status == 'processing' ? 'selected' : '' }}>Proses</option>
-                                    <option value="success" {{ $trx->process_status == 'success' ? 'selected' : '' }}>Success</option>
-                                    <option value="failed" {{ $trx->process_status == 'failed' ? 'selected' : '' }}>Gagal</option>
-                                </select>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <button type="submit" class="text-primary hover:text-white text-xs underline">Simpan</button>
-                            </td>
-                        </form>
+                            <!-- 1. Form Update (Hidden Wrapper) -->
+                            <form id="form-update-{{$trx->id}}" action="{{ route('admin.transaction.update', $trx->id) }}" method="POST" style="display: none;">
+                                @csrf
+                                @method('PUT')
+                            </form>
+                            <!-- Tombol Simpan Manual (Opsional) -->
+                            <button form="form-update-{{$trx->id}}" type="submit" class="text-primary hover:text-white text-xs underline" title="Simpan Perubahan">
+                                Simpan
+                            </button>
+
+                            <span class="text-gray-600">|</span>
+
+                            <!-- 2. Form Delete -->
+                            <form action="{{ route('admin.transaction.destroy', $trx->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus riwayat transaksi ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-500 hover:text-red-400 text-xs font-bold transition flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
